@@ -1,45 +1,18 @@
 {% extends 'chat/base.html' %}
 
 {% block content %}
-
-
-
-<div class = "container-fluid my-4">        
-
+<h3>{{user.username}}</h3>
         <ul id= "message-list">
             {% for message in messages %}
-            <li>[{{message.sender.username}}]: {{message.text}}</li>
+            <li>[{{message.sender.username}}]:{{message.text}}</li>
             {% endfor %}
         </ul>
-    <div>
-        <form id="message-form">
+        <form  id="form" >
             {% csrf_token %}
             <input type="text" name="message" id="message" class="form-control" rows = "3" required style="width: 50vw; display: inline-block;">
             <input type="submit" value="Send" class="btn" >
         </form>
-    </div>
-
-</div>
-</div>
-
-
-
-
-
-
-
-
-    <p id="user" style="display: none;">{{chatlist.user.username}}</p>
 {% endblock content %}
-
-
-
-
-
-
-
-
-
 {% block custom_javascript %}
 <script>
     const url = 'ws://127.0.0.1:8000/ws' + window.location.pathname;
@@ -56,21 +29,13 @@
   
         const ul = document.getElementById('message-list')
         var li = document.createElement('li');
-        
-    
         data = JSON.parse(event.data);
-        var userName = data.username
-        var logged_user = document.getElementById("user").innerHTML
-        if (logged_user == data.username ){
-            li.innerHTML = `<span class = "right">${data.text}</span>`
-            
-        }else{
-            li.innerHTML = `<span class = "">${data.text}</span>`
-           
-        }
+        li.append(document.createTextNode(
+            '[' + data.username + ']:' + data.text 
+        ))
         ul.append(li);
     }
-    var messageForm = document.getElementById('message-form')
+    var messageForm = document.getElementById('form')
     messageForm.addEventListener('submit', sendmessage)
     function sendmessage (e){
         if(e.preventDefault) e.preventDefault();
