@@ -9,6 +9,7 @@ class User(AbstractUser):
     email_verified=models.BooleanField(default=False)
     otp_mobile=models.CharField(max_length=10,null=True,blank=True)
     otp_email=models.CharField(max_length=10,null=True,blank=True)
+    profile_image=models.ImageField(upload_to='profile_image', default='profile_image/default_image.png')
 
 
 
